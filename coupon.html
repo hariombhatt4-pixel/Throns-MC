@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throns MC - Coupon</title>
+    <script src="https://tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cloudflare.com"><link rel="stylesheet" href="/styles.css">
+</head>
+<body class="min-h-screen flex flex-col">
+    <main class="flex-grow max-w-md w-full mx-auto px-4 py-8 space-y-6">
+        <div class="bg-[#1a1a1e] rounded-lg p-6 border border-[#2d2d34]">
+            <h2 class="text-xl font-bold text-white mb-4 text-center">Redeem Voucher Pass</h2>
+            <div class="space-y-4">
+                <input type="text" id="coupon-input" class="w-full bg-[#121214] border border-[#3d3d44] rounded p-2.5 uppercase font-mono text-center tracking-widest text-white" placeholder="ENTER CODE">
+                <button onclick="handleCoupon()" class="w-full bg-amber-500 text-black font-bold py-2.5 rounded uppercase tracking-wide">Validate</button>
+                <div id="alert-box" class="hidden text-center text-sm p-2 rounded"></div>
+            </div>
+        </div>
+        <!-- Card for Screenshots -->
+        <div id="screenshot-card" class="hidden bg-gradient-to-br from-amber-600 to-amber-900 rounded-lg p-6 text-center text-white border-4 border-yellow-400 shadow-2xl">
+            <h3 class="text-lg font-bold tracking-widest uppercase text-yellow-300">Throns MC Discount Pass</h3>
+            <div class="text-5xl font-black my-3">35% OFF</div>
+            <div class="bg-black/30 inline-block px-4 py-1.5 rounded font-mono font-bold text-xl tracking-widest">LS35</div>
+            <p class="text-xs text-yellow-100/80 mt-2">Take a screenshot of this voucher card and paste it directly into your Discord ticket panel!</p>
+        </div>
+    </main>
+    <script src="/navbar.js"></script>
+    <script>
+        function handleCoupon() {
+            const val = document.getElementById('coupon-input').value.trim();
+            const alertBox = document.getElementById('alert-box');
+            const card = document.getElementById('screenshot-card');
+            
+            alertBox.className = "text-center text-sm p-2 rounded ";
+            
+            if(val === "throns-admin") {
+                sessionStorage.setItem('throns_admin_auth', 'true');
+                alertBox.classList.add('bg-yellow-900/40', 'text-yellow-400');
+                alertBox.innerText = "Admin Dashboard authorized! Redirecting...";
+                setTimeout(() => window.location.href = '/admin', 1000);
+            } else if(val.toUpperCase() === "LS35") {
+                sessionStorage.setItem('ls35_active', 'true');
+                alertBox.classList.add('bg-green-900/40', 'text-green-400');
+                alertBox.innerText = "LS35 Discount code loaded successfully across catalog views!";
+                card.classList.remove('hidden');
+            } else {
+                alertBox.classList.add('bg-red-900/40', 'text-red-400');
+                alertBox.innerText = "Unknown coupon registry hash code.";
+            }
+        }
+    </script>
+</body>
+</html>
