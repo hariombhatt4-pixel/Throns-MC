@@ -1,51 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Throns MC - Coupon</title>
     <script src="https://tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cloudflare.com"><link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="min-h-screen flex flex-col">
-    <main class="flex-grow max-w-md w-full mx-auto px-4 py-8 space-y-6">
-        <div class="bg-[#1a1a1e] rounded-lg p-6 border border-[#2d2d34]">
-            <h2 class="text-xl font-bold text-white mb-4 text-center">Redeem Voucher Pass</h2>
-            <div class="space-y-4">
-                <input type="text" id="coupon-input" class="w-full bg-[#121214] border border-[#3d3d44] rounded p-2.5 uppercase font-mono text-center tracking-widest text-white" placeholder="ENTER CODE">
-                <button onclick="handleCoupon()" class="w-full bg-amber-500 text-black font-bold py-2.5 rounded uppercase tracking-wide">Validate</button>
-                <div id="alert-box" class="hidden text-center text-sm p-2 rounded"></div>
+
+    <nav class="navbar-bg p-4 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-6xl mx-auto flex justify-between items-center flex-wrap gap-2">
+            <span class="text-xl font-black tracking-widest text-gold uppercase">Throns MC</span>
+            <div class="flex space-x-2 overflow-x-auto">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ranks" class="nav-link">Ranks</a>
+                <a href="/kits" class="nav-link">Kits</a>
+                <a href="/money" class="nav-link">Money</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/coupon" class="nav-link nav-link-active">Coupon</a>
             </div>
         </div>
-        <!-- Card for Screenshots -->
-        <div id="screenshot-card" class="hidden bg-gradient-to-br from-amber-600 to-amber-900 rounded-lg p-6 text-center text-white border-4 border-yellow-400 shadow-2xl">
-            <h3 class="text-lg font-bold tracking-widest uppercase text-yellow-300">Throns MC Discount Pass</h3>
-            <div class="text-5xl font-black my-3">35% OFF</div>
-            <div class="bg-black/30 inline-block px-4 py-1.5 rounded font-mono font-bold text-xl tracking-widest">LS35</div>
-            <p class="text-xs text-yellow-100/80 mt-2">Take a screenshot of this voucher card and paste it directly into your Discord ticket panel!</p>
+    </nav>
+
+    <main class="flex-grow max-w-md w-full mx-auto px-4 py-12 space-y-6">
+        <div class="mc-card p-6 shadow-xl">
+            <h2 class="text-xl font-bold text-white mb-4 text-center uppercase tracking-wide">Redeem Voucher Pass</h2>
+            <div class="space-y-4">
+                <input type="text" id="code-input" class="w-full bg-[#0d0d0f] border border-[#27272a] rounded p-3 uppercase font-mono text-center tracking-widest text-white text-sm focus:outline-none focus:border-amber-500" placeholder="ENTER CODE">
+                <button onclick="checkVoucher()" class="w-full bg-amber-500 text-black font-extrabold py-3 rounded uppercase text-xs tracking-wider border-b-4 border-amber-700 hover:bg-amber-400">Verify Code</button>
+                <div id="status-box" class="hidden text-center text-xs p-2.5 rounded font-bold"></div>
+            </div>
+        </div>
+
+        <!-- Screenshot Voucher Display Pass -->
+        <div id="pass-card" class="hidden voucher-box rounded-lg p-6 text-center text-white shadow-2xl">
+            <h3 class="text-sm font-bold tracking-widest uppercase text-yellow-300">Throns MC Discount Pass</h3>
+            <div class="text-5xl font-black my-4 tracking-tighter text-white">35% OFF</div>
+            <div class="bg-black/40 inline-block px-4 py-1.5 rounded font-mono font-black text-xl tracking-widest border border-white/10">LS35</div>
+            <p class="text-[10px] text-yellow-100/70 mt-3 leading-relaxed">
+                Take a clean screenshot of this card right now and paste it into your open Discord ticket to claim your savings!
+            </p>
         </div>
     </main>
-    <script src="/navbar.js"></script>
+
+    <footer class="navbar-bg py-6 text-center text-xs text-gray-500 mt-auto border-t-4 border-[#27272a]">
+        <p>&copy; 2026 <span class="text-gray-400 font-bold">Throns MC</span>. Not affiliated with Mojang.</p>
+    </footer>
+
     <script>
-        function handleCoupon() {
-            const val = document.getElementById('coupon-input').value.trim();
-            const alertBox = document.getElementById('alert-box');
-            const card = document.getElementById('screenshot-card');
+        function checkVoucher() {
+            const input = document.getElementById('code-input').value.trim();
+            const status = document.getElementById('status-box');
+            const card = document.getElementById('pass-card');
             
-            alertBox.className = "text-center text-sm p-2 rounded ";
-            
-            if(val === "throns-admin") {
+            status.className = "text-center text-xs p-2.5 rounded font-bold ";
+            status.classList.remove('hidden');
+            card.classList.add('hidden');
+
+            if(input === "throns-admin") {
                 sessionStorage.setItem('throns_admin_auth', 'true');
-                alertBox.classList.add('bg-yellow-900/40', 'text-yellow-400');
-                alertBox.innerText = "Admin Dashboard authorized! Redirecting...";
+                status.classList.add('bg-yellow-500/10', 'text-yellow-400', 'border', 'border-yellow-500/20');
+                status.innerText = "Admin Dashboard Authorized! Launching panel view...";
                 setTimeout(() => window.location.href = '/admin', 1000);
-            } else if(val.toUpperCase() === "LS35") {
+            } else if(input.toUpperCase() === "LS35") {
                 sessionStorage.setItem('ls35_active', 'true');
-                alertBox.classList.add('bg-green-900/40', 'text-green-400');
-                alertBox.innerText = "LS35 Discount code loaded successfully across catalog views!";
+                status.classList.add('bg-emerald-500/10', 'text-emerald-400', 'border', 'border-emerald-500/20');
+                status.innerText = "Coupon applied! Slicing catalog rank values by 35%.";
                 card.classList.remove('hidden');
             } else {
-                alertBox.classList.add('bg-red-900/40', 'text-red-400');
-                alertBox.innerText = "Unknown coupon registry hash code.";
+                status.classList.add('bg-red-500/10', 'text-red-400', 'border', 'border-red-500/20');
+                status.innerText = "Invalid store promotion code entry.";
             }
         }
     </script>
