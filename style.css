@@ -1,0 +1,11 @@
+body {
+    background-color: #121214;
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.mc-border {
+    border: 4px solid #1e1e24;
+}
+.admin-glow {
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+}
