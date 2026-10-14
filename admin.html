@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throns MC - Admin Control</title>
+    <script src="https://tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cloudflare.com"><link rel="stylesheet" href="/styles.css">
+</head>
+<body class="min-h-screen flex flex-col">
+    <main class="flex-grow max-w-3xl w-full mx-auto px-4 py-8 space-y-6">
+        <div class="admin-glow bg-[#161619] p-6 rounded-lg border border-yellow-500/30 space-y-4">
+            <h2 class="text-2xl font-black text-yellow-500 uppercase tracking-wider">Item Management Console</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#1a1a1e] p-4 rounded border border-[#2d2d34]">
+                <div class="space-y-2">
+                    <label class="block text-xs text-gray-400">Target Category</label>
+                    <select id="cat" class="w-full bg-[#121214] text-white p-2 rounded text-sm">
+                        <option value="ranks">Ranks</option><option value="kits">Kits</option><option value="money">In-Game Money</option>
+                    </select>
+                    <label class="block text-xs text-gray-400">Title</label>
+                    <input type="text" id="title" class="w-full bg-[#121214] text-white p-2 rounded text-sm" placeholder="e.g., God Kit">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-xs text-gray-400">Price Structure String</label>
+                    <input type="text" id="price" class="w-full bg-[#121214] text-white p-2 rounded text-sm" placeholder="40 rs">
+                    <label class="block text-xs text-gray-400">Perks (Comma separated)</label>
+                    <input type="text" id="perks" class="w-full bg-[#121214] text-white p-2 rounded text-sm" placeholder="Fly, Kit items, Custom prefix">
+                </div>
+                <button onclick="commitItem()" class="col-span-1 md:col-span-2 bg-emerald-600 py-2 rounded font-bold text-xs uppercase text-white mt-2">Publish Item Now</button>
+            </div>
+
+            <div class="bg-[#1a1a1e] p-4 rounded border border-[#2d2d34] space-y-2">
+                <h3 class="font-bold text-white text-sm">Active Inventory Manifest</h3>
+                <div id="manifest-list" class="space-y-2"></div>
+            </div>
+        </div>
+    </main>
+    <script src="/navbar.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if(sessionStorage.getItem('throns_admin_auth') !== 'true') {
+                window.location.href = '/coupon';
+            }
+            showManifest();
+        });
+        function showManifest() {
+            const list = document.getElementById('manifest-list');
+            list.innerHTML = storeData.map(item => `
+                <div class="bg-[#121214] p-2.5 rounded border border-[#2d2d34] flex justify-between items-center text-xs">
+                    <div><span class="text-amber-400 uppercase font-bold mr-2">[${item.category}]</span> ${item.title} - ${item.price}</div>
+                    <button onclick="delItem('${item.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+        function commitItem() {
+            const category = document.getElementById('cat').value;
+            const title = document.getElementById('title').value.trim();
+            const price = document.getElementById('price').value.trim();
+            const perks = document.getElementById('perks').value.trim().split(',');
+            if(!title || !price) return;
+            
+            storeData.push({ id: 'id_' + Date.now(), category, title, price, color: 'amber', perks });
+            localStorage.setItem('throns_store_data', JSON.stringify(storeData));
+            showManifest();
+            document.getElementById('title').value = ''; document.getElementById('price').value = ''; document.getElementById('perks').value = '';
+        }
+        function delItem(id) {
+            storeData = storeData.filter(i => i.id !== id);
+            localStorage.setItem('throns_store_data', JSON.stringify(storeData));
+            showManifest();
+        }
+    </script>
+</body>
+</html>
