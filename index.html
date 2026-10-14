@@ -1,23 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Throns MC - Store</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throns MC - Home</title>
     <script src="https://tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cloudflare.com">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="min-h-screen flex flex-col">
-    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8">
-        <div class="bg-[#1a1a1e] rounded-lg p-8 text-center border-2 border-[#2d2d34] mc-border">
-            <h1 class="text-4xl font-extrabold text-white mb-4">Welcome to Throns MC</h1>
-            <p class="text-gray-400 max-w-2xl mx-auto mb-6">Explore our standalone store tabs to claim rewards. All transactions are backed manually by staff via Discord tickets.</p>
-            <div class="flex justify-center gap-4">
-                <a href="/ranks" class="bg-amber-500 text-black font-bold px-6 py-3 rounded uppercase tracking-wider hover:bg-amber-400">Browse Ranks</a>
-                <a href="https://discord.gg" target="_blank" class="bg-[#5865F2] text-white font-bold px-6 py-3 rounded uppercase tracking-wider flex items-center gap-2"><i class="fa-brands fa-discord"></i> Open Ticket</a>
+
+    <!-- Embedded Header Layout Menu -->
+    <nav class="navbar-bg p-4 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-6xl mx-auto flex justify-between items-center flex-wrap gap-2">
+            <span class="text-xl font-black tracking-widest text-gold uppercase">Throns MC</span>
+            <div class="flex space-x-2 overflow-x-auto">
+                <a href="/" class="nav-link nav-link-active">Home</a>
+                <a href="/ranks" class="nav-link">Ranks</a>
+                <a href="/kits" class="nav-link">Kits</a>
+                <a href="/money" class="nav-link">Money</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/coupon" class="nav-link">Coupon</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Panel Body -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-12 flex flex-col justify-center">
+        <div class="mc-card p-8 text-center shadow-xl">
+            <h1 class="text-4xl font-extrabold text-white mb-4 tracking-wide">Welcome to Throns MC</h1>
+            <p class="text-gray-400 max-w-xl mx-auto mb-8 text-sm leading-relaxed">
+                Explore our store categories to enhance your in-game experience. All product claims are completed securely and manually by our staff team.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="/ranks" class="w-full sm:w-auto bg-amber-500 text-black font-extrabold px-8 py-3.5 rounded uppercase text-xs tracking-wider border-b-4 border-amber-700 hover:bg-amber-400 text-center">Browse Store Catalog</a>
+                <a href="https://discord.gg" target="_blank" class="w-full sm:w-auto bg-[#5865F2] text-white font-extrabold px-8 py-3.5 rounded uppercase text-xs tracking-wider border-b-4 border-[#404eed] hover:bg-[#4752c4] flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-discord text-sm"></i> Contact Staff Team
+                </a>
             </div>
         </div>
     </main>
-    <script src="/navbar.js"></script>
+
+    <footer class="navbar-bg py-6 text-center text-xs text-gray-500 mt-auto border-t-4 border-[#27272a]">
+        <p>&copy; 2026 <span class="text-gray-400 font-bold">Throns MC</span>. Not affiliated with Mojang.</p>
+    </footer>
+
 </body>
 </html>
