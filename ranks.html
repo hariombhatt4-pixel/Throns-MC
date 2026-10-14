@@ -1,39 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Throns MC - Ranks</title>
     <script src="https://tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cloudflare.com"><link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body class="min-h-screen flex flex-col">
+
+    <nav class="navbar-bg p-4 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-6xl mx-auto flex justify-between items-center flex-wrap gap-2">
+            <span class="text-xl font-black tracking-widest text-gold uppercase">Throns MC</span>
+            <div class="flex space-x-2 overflow-x-auto">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/ranks" class="nav-link nav-link-active">Ranks</a>
+                <a href="/kits" class="nav-link">Kits</a>
+                <a href="/money" class="nav-link">Money</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/coupon" class="nav-link">Coupon</a>
+            </div>
+        </div>
+    </nav>
+
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
-        <h2 class="text-2xl font-bold border-l-4 border-amber-500 pl-3 text-white uppercase">Server Ranks</h2>
-        <div id="ranks-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+        <h2 class="text-2xl font-black border-l-4 border-amber-500 pl-3 text-white uppercase tracking-wider">Premium Server Ranks</h2>
+        <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
     </main>
-    <script src="/navbar.js"></script>
+
+    <footer class="navbar-bg py-6 text-center text-xs text-gray-500 mt-auto border-t-4 border-[#27272a]">
+        <p>&copy; 2026 <span class="text-gray-400 font-bold">Throns MC</span>. Not affiliated with Mojang.</p>
+    </footer>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const container = document.getElementById('ranks-container');
-            const items = storeData.filter(i => i.category === 'ranks');
+            const grid = document.getElementById('catalog-grid');
+            const localData = JSON.parse(localStorage.getItem('throns_store_data')) || [
+                { id: "r1", category: "ranks", title: "MASTER RANK", price: "40 rs", perks: ["Custom Chat Prefix", "Access to /feed", "1x Crate Key Monthly"] },
+                { id: "r2", category: "ranks", title: "KING RANK", price: "100 rs", perks: ["All Master Perks", "Access to /fly", "Priority Join Status"] }
+            ];
             
-            if(!items.length) { container.innerHTML = `<p class="text-gray-500">No ranks added yet.</p>`; return; }
-            
-            container.innerHTML = items.map(item => {
-                let displayPrice = item.price;
-                const numMatch = item.price.match(/\d+/);
-                if (activeDiscountFactor > 0 && numMatch) {
-                    displayPrice = Math.round(parseInt(numMatch) * (1 - activeDiscountFactor)) + " rs (LS35 Applied)";
+            const activeRanks = localData.filter(i => i.category === 'ranks');
+            const discountActive = sessionStorage.getItem('ls35_active') === 'true';
+
+            if(!activeRanks.length) {
+                grid.innerHTML = `<p class="text-gray-500 text-sm italic">No items created in this section yet.</p>`;
+                return;
+            }
+
+            grid.innerHTML = activeRanks.map(rank => {
+                let currentPrice = rank.price;
+                const numbers = rank.price.match(/\d+/);
+                if (discountActive && numbers) {
+                    const priceValue = parseInt(numbers);
+                    const calculated = Math.round(priceValue * 0.65);
+                    currentPrice = `${calculated} rs <span class="text-xs line-through text-red-500 ml-1">(${rank.price})</span>`;
                 }
+
                 return `
-                    <div class="bg-[#1a1a1e] rounded-lg p-5 border-2 border-amber-500/40 flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-xl font-bold text-white mb-1 uppercase">${item.title}</h3>
-                            <div class="text-2xl font-black text-amber-400 mb-4">${displayPrice}</div>
-                            <ul class="space-y-2 mb-6">${item.perks.map(p => `<li class="text-xs text-gray-400"><i class="fa-solid fa-check text-emerald-500 mr-2"></i>\${p}</li>`).join('')}</ul>
-                        </div>
-                        <a href="https://discord.gg" target="_blank" class="w-full text-center py-2 rounded text-sm font-bold uppercase bg-amber-500 text-black">Buy via Ticket</a>
-                    </div>`;
+                <div class="mc-card p-6 flex flex-col justify-between shadow-lg">
+                    <div>
+                        <h3 class="text-xl font-bold text-white uppercase mb-1 tracking-wide">${rank.title}</h3>
+                        <div class="text-2xl font-black text-amber-400 mb-4">${currentPrice}</div>
+                        <ul class="space-y-2 mb-6">
+                            ${rank.perks.map(p => `
+                                <li class="text-xs text-gray-400 flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-check text-emerald-500 text-[10px]"></i> \${p}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    <a href="https://discord.gg" target="_blank" class="w-full text-center py-2.5 rounded bg-amber-500 text-black font-extrabold text-xs uppercase tracking-wider border-b-4 border-amber-700 hover:bg-amber-400 block">Buy via Ticket</a>
+                </div>`;
             }).join('');
         });
     </script>
